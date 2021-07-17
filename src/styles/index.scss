@@ -1,5 +1,8 @@
 @import "~bootstrap/scss/bootstrap.scss";
 
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@1,900&display=swap');
+
+
 /* 
 
     You can write your own styles here...
@@ -11,3 +14,27 @@
     import 'relative/path/to/stylesheet.scss';
 
 */
+.List {
+    margin: auto;
+    width: 60%;
+    // border: 1px solid ;
+    padding: 10px;
+}
+
+.title {
+    color: green;
+    margin: auto;
+    width: 20%;
+    // border: 1px solid ;
+    padding: 10px;
+    padding-bottom: 100px;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 30px;
+}
+
+.input {
+    margin: auto 222px;
+    width: 60%;
+    border: 1px solid ;
+    padding: 10px;
+}
