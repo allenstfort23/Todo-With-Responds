@@ -9,7 +9,7 @@ import "bootstrap";
 import "../styles/index.scss";
 
 //import your own components
-import Home from "/workspace/ToDoList/src/js/component/home.js";
+import { Home } from "./component/home";
 
 //render your react application
 ReactDOM.render(<Home />, document.querySelector("#app"));

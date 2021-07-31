@@ -9,6 +9,13 @@ export function Home() {
 		"https://assets.breatheco.de/apis/fake/todos/user/allenstfort";
 
 	useEffect(() => {
+		fetch(apiUrl)
+			.then(res => res.json())
+			.then(newTodo => setVariable(newTodo))
+			.catch(error => console.log(error));
+	}, []);
+
+	useEffect(() => {
 		if (variable !== null) {
 			fetch(apiUrl, {
 				method: "PUT",
@@ -17,11 +24,6 @@ export function Home() {
 					"Content-Type": "application/json"
 				}
 			});
-		} else {
-			fetch(apiUrl)
-				.then(res => res.json())
-				.then(newTodo => setVariable(newTodo))
-				.catch(error => console.log(error));
 		}
 	}, [variable]);
 
@@ -82,4 +84,3 @@ export function Home() {
 		</div>
 	);
 }
-export default Home;
