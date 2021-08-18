@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 export function Home() {
-	// const [isShown, setIsShown] = useState(false);
+	const [isShown, setIsShown] = useState({ state: false, index: undefined });
 	const [variable, setVariable] = useState([]);
 
 	const apiUrl =
@@ -32,9 +32,21 @@ export function Home() {
 
 	let todo = (variable || []).map((item, i) => {
 		return (
-			<li className="list-group-item" key={i}>
+			<li
+				className="col-12 list-group-item text-info"
+				key={i}
+				onMouseEnter={() => setIsShown({ state: true, index: i })}
+				onMouseLeave={() =>
+					setIsShown({ state: false, index: undefined })
+				}>
 				{item.label}
-				<button onClick={() => deleteTodo(i)}>X</button>
+				{isShown.state && isShown.index === i && (
+					<button
+						className="float-right"
+						onClick={() => deleteTodo(i)}>
+						x
+					</button>
+				)}
 			</li>
 		);
 	});
@@ -69,6 +81,7 @@ export function Home() {
 				label: onKeyDownEvent.target.value,
 				done: false
 			};
+			onKeyDownEvent.target.value = "";
 			addingTodo(userInput);
 			// fetch(apiUrl, {
 			// 	method: "PUT",
