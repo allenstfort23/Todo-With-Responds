@@ -3,35 +3,38 @@ import { useState, useEffect } from "react";
 
 export function Home() {
 	// const [isShown, setIsShown] = useState(false);
-	const [variable, setVariable] = useState(null);
+	const [variable, setVariable] = useState([]);
 
 	const apiUrl =
-		"https://assets.breatheco.de/apis/fake/todos/user/allenstfort";
+		"https://3245-black-nightingale-9dkcwj6b.ws-us14.gitpod.io/todos";
 
-	useEffect(() => {
-		fetch(apiUrl)
-			.then(res => res.json())
-			.then(newTodo => setVariable(newTodo))
-			.catch(error => console.log(error));
+	useEffect(async () => {
+		const res = await fetch(apiUrl);
+		const data = await res.json();
+		setVariable(data);
 	}, []);
 
-	useEffect(() => {
-		if (variable !== null) {
-			fetch(apiUrl, {
-				method: "PUT",
-				body: JSON.stringify(variable),
-				headers: {
+	const addingTodo = async todo => {
+		try {
+			const res = await fetch(apiUrl, {
+				method: "POST",
+				body: JSON.stringify(todo),
+				header: {
 					"Content-Type": "application/json"
 				}
 			});
+			const data = await res.json();
+			setVariable(data);
+		} catch (error) {
+			console.log(error);
 		}
-	}, [variable]);
+	};
 
 	let todo = (variable || []).map((item, i) => {
 		return (
 			<li className="list-group-item" key={i}>
 				{item.label}
-				<button onClick={() => removeItem(i)}>X</button>
+				<button onClick={() => deleteTodo(i)}>X</button>
 			</li>
 		);
 	});
@@ -44,7 +47,19 @@ export function Home() {
 		// 		return item;
 		// 	}
 		// });
-		setVariable(newArray);
+		deleteTodo(newArray);
+	};
+
+	const deleteTodo = async postiton => {
+		try {
+			const res = await fetch(`${apiUrl}/${postiton}`, {
+				method: "DELETE"
+			});
+			const data = await res.json();
+			setVariable(data);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	const newTodo = onKeyDownEvent => {
@@ -54,9 +69,7 @@ export function Home() {
 				label: onKeyDownEvent.target.value,
 				done: false
 			};
-			const newTodo = [...variable, userInput];
-			setVariable(newTodo);
-			onKeyDownEvent.target.value = "";
+			addingTodo(userInput);
 			// fetch(apiUrl, {
 			// 	method: "PUT",
 			// 	body: JSON.stringify(newTodo),
@@ -68,19 +81,34 @@ export function Home() {
 	};
 
 	return (
-		<div className="List ">
-			<h1 className="title">To Do List</h1>
-			<input
-				className={"input"}
-				onKeyDown={newTodo}
-				type="text"
-				id="fname"
-				placeholder="Task"
-				name="fname"></input>
-			<div>
-				<ul className="list-group">{todo}</ul>
-				<div className="footer">{todo.length} item left</div>
+		<>
+			<h1 className="text-center text-success mt-4 ">To Do List</h1>
+			<div className="List col-4  mx-auto list-group mt-4">
+				<input
+					className="col-12 p-3 font-weight-bold text-center"
+					onKeyDown={newTodo}
+					type="text"
+					id="fname"
+					placeholder="Enter A Task"
+					name="fname"
+				/>
+				<ul className="col-12 p-0">
+					{todo}
+					<span className="footer list-group-item text-danger">
+						{todo.length} item left
+					</span>
+				</ul>
 			</div>
-		</div>
+			{/* <div className="App">
+				<button
+					onMouseEnter={() => setIsShown(true)}
+					onMouseLeave={() => setIsShown(false)}>
+					Hover over me!
+				</button>
+				{isShown && (
+					<div>I&apos;ll appear when you hover over the button.</div>
+				)}
+			</div> */}
+		</>
 	);
 }
